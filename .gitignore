@@ -1,0 +1,22 @@
+# Godot
+.import/
+export.cfg
+export_presets.cfg
+.mono/
+data_*/
+mono_crash.*.json
+
+# Godot 4
+.godot/
+*.translation
+
+# Server
+server/node_modules/
+server/dist/
+server/.env
+server/package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+*.log

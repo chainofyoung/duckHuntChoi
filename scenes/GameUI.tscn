@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvaxbb66hlfex"]
+
+[ext_resource type="Script" uid="uid://dieav76gnaue" path="res://scripts/GameUI.gd" id="1_jkspe"]
+
+[node name="GameUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jkspe")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(20, 20)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "플레이어"
+horizontal_alignment = 1
+
+[node name="PlayerList" type="VBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+accessibility_name = "PlayerList"
+
+[node name="SeekerLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+pivot_offset = Vector2(-220, 20)
+text = "술래:"
+horizontal_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "남은 시간: 3:00"
+
+[node name="HintArrow" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TransformPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TransformPanel"]
+layout_mode = 2
+
+[node name="DuckButton" type="Button" parent="TransformPanel/HBoxContainer"]
+layout_mode = 2
+text = "오리"
+
+[node name="BenchButton" type="Button" parent="TransformPanel/HBoxContainer"]
+layout_mode = 2
+text = "벤치"
+
+[node name="TrashButton" type="Button" parent="TransformPanel/HBoxContainer"]
+layout_mode = 2
+text = "쓰레기통"
