@@ -21,10 +21,10 @@ func _ready():
 		NetworkManager.player_connected.connect(_on_player_connected)
 		
 		# 테스트: 5초 후 자동 시작
-		await get_tree().create_timer(5.0).timeout
-		if NetworkManager.get_player_count() == 1:
-			print("테스트 모드: AI만으로 시작")
-			start_game()
+		#await get_tree().create_timer(5.0).timeout
+		#if NetworkManager.get_player_count() == 1:
+			#print("테스트 모드: AI만으로 시작")
+			#start_game()
 
 
 func _process(delta):
@@ -48,19 +48,50 @@ func _on_player_connected(id):
 		await get_tree().create_timer(5.0).timeout
 		start_game()
 
+#func start_game():
+	#if not multiplayer.is_server():
+		#return
+	#
+	#print("🎮 Starting game!")
+	#
+	## 술래 선정
+	#var player_ids = NetworkManager.players.keys()
+	#player_ids.append(1)
+	#seeker_id = player_ids.pick_random()
+	#
+	## AI 생성
+	#spawn_ai_players(20)
+	#
+	## 준비 단계
+	#current_phase = Phase.PREPARE
+	#prepare_time = 30
+	#rpc("set_phase", Phase.PREPARE, seeker_id)
+	#emit_signal("phase_changed", Phase.PREPARE)
+	#emit_signal("game_started", seeker_id)
+	#
+	## 준비 타이머
+	#start_prepare_timer()
+	
 func start_game():
 	if not multiplayer.is_server():
 		return
 	
-	print("🎮 Starting game!")
+	print("게임시작#@#@#!")
 	
 	# 술래 선정
 	var player_ids = NetworkManager.players.keys()
 	player_ids.append(1)
 	seeker_id = player_ids.pick_random()
 	
+	# 모든 플레이어에게 역할 할당
+	for pid in player_ids:
+		if pid == seeker_id:
+			assign_role.rpc_id(pid, "seeker")
+		else:
+			assign_role.rpc_id(pid, "hider")
+	
 	# AI 생성
-	spawn_ai_players(20)
+	spawn_ai_players(80)
 	
 	# 준비 단계
 	current_phase = Phase.PREPARE
@@ -69,7 +100,6 @@ func start_game():
 	emit_signal("phase_changed", Phase.PREPARE)
 	emit_signal("game_started", seeker_id)
 	
-	# 준비 타이머
 	start_prepare_timer()
 
 func start_prepare_timer():
@@ -126,18 +156,19 @@ func _on_game_tick():
 	if time_remaining <= 0:
 		end_game("hiders")
 
+
 func spawn_ai_players(count: int):
 	for i in range(count):
 		var ai = preload("res://scenes/AIPlayer.tscn").instantiate()
 		ai.name = "AI_" + str(i)
-		ai.position = Vector3(randf_range(-20, 20), 1, randf_range(-20, 20))
+		ai.position = Vector3(randf_range(-12, 12), 1.8, randf_range(-12, 12))  # 🆕 y=1.8
 		
 		get_tree().root.get_node("Main/Players").add_child(ai)
 		ai_players.append(ai)
 		
-		# 변신 (오리 비율 높게)
-		var forms = ["duck", "duck", "duck", "duck", "bench", "trashcan", "rock"]
+		var forms = ["duck", "duck", "duck", "duck", "duck", "duck", "bench", "trashcan", "rock"]
 		ai.transform_to(forms.pick_random())
+		
 
 func give_hint_to_seeker():
 	# 술래 위치 찾기
@@ -192,3 +223,15 @@ func show_hint(direction: Vector3):
 @rpc("authority", "call_local")
 func show_results(winner: String):
 	print("Game over! Winner: ", winner)
+
+#@rpc("authority", "call_remote")
+#func assign_role(new_role: String):
+	#var player_node = get_tree().root.get_node("Main/Players/" + str(multiplayer.get_unique_id()))
+	#if player_node:
+		#player_node.set_role(new_role)
+
+@rpc("authority", "call_remote")
+func assign_role(new_role: String):
+	var player_node = get_tree().root.get_node("Main/Players/" + str(multiplayer.get_unique_id()))
+	if player_node:
+		player_node.set_role(new_role)

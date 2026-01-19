@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b1m7thkn5mfdf"]
+[gd_scene load_steps=8 format=3 uid="uid://b1m7thkn5mfdf"]
 
 [ext_resource type="Script" uid="uid://bytcv4afm0oal" path="res://scripts/Main.gd" id="1_rvslj"]
 [ext_resource type="Script" uid="uid://dxh3hei6gst2p" path="res://scripts/NetworkManager.gd" id="2_0bbpv"]
@@ -6,10 +6,17 @@
 [ext_resource type="Script" uid="uid://bvxm8lio68aks" path="res://scripts/GameManager.gd" id="3_rarhs"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vyk5b"]
-size = Vector2(50, 50)
+size = Vector2(30, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rarhs"]
+transparency = 1
+albedo_color = Color(0.30980393, 0.7019608, 0.8509804, 1)
+metallic = 0.2
+metallic_specular = 0.8
+roughness = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rarhs"]
-size = Vector3(50, 1, 50)
+size = Vector3(30, 1, 30)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_rvslj")
@@ -26,14 +33,21 @@ script = ExtResource("2_0bbpv")
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("3_rarhs")
 
-[node name="Players" parent="." instance=ExtResource("3_0bbpv")]
+[node name="Players2" parent="." instance=ExtResource("3_0bbpv")]
+visible = false
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 1, 0)
 mesh = SubResource("PlaneMesh_vyk5b")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_rarhs")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_rarhs")
+debug_color = Color(0.40784314, 0.41568628, 0.47058824, 0.41960785)
+
+[node name="Players" type="Node3D" parent="."]
